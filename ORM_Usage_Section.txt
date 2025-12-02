@@ -1,0 +1,61 @@
+## ORM Usage Section
+
+**SQLAlchemy ORM Implementation:**
+
+Our entire application uses SQLAlchemy's Object-Relational Mapping (ORM) exclusively for all database operations, eliminating the need for raw SQL queries and ensuring type safety, database independence, and protection against SQL injection. The ORM maps our 9 core entities—Member, Trainer, AdminStaff, Room, PersonalTrainingSession, HealthMetric, FitnessGoal, Invoice, and MaintenanceIssue—to Python classes that inherit from SQLAlchemy's declarative Base. Each entity class uses Column definitions to specify data types and constraints (e.g., `Column(String(50), nullable=False)`), while relationship() decorators establish bidirectional navigation between related entities. For example, querying a member's health metrics is as simple as accessing `member.health_metrics`, which automatically performs the JOIN operation behind the scenes. All data operations follow consistent ORM patterns: SELECT queries use `db.query(Entity).filter(conditions).first()` or `.all()`, INSERT operations create model instances (e.g., `new_member = Member(FirstName='John', Email='john@example.com')`) and persist them with `db.add()` and `db.commit()`, UPDATE operations modify object attributes directly (e.g., `member.FirstName = 'Jane'`) before committing, and DELETE operations use `db.delete(entity)`. Complex queries, such as detecting time conflicts for room bookings, are constructed entirely through ORM filter conditions: `db.query(PersonalTrainingSession).filter(PersonalTrainingSession.RoomID == room_id, PersonalTrainingSession.StartTime < session.EndTime, PersonalTrainingSession.EndTime > session.StartTime).first()`. Transaction management is handled through the session object, with `db.rollback()` called on exceptions to maintain data integrity. This pure ORM approach means SQLAlchemy generates all SQL statements automatically, allowing our code to work with any database backend without modification.
+
+**Code Samples:**
+
+```python
+# Query Example - Finding a member by email
+member = db.query(Member).filter(Member.Email == email).first()
+
+# Insert Example - Creating a new member
+new_member = Member(
+    FirstName=first_name.strip(),
+    LastName=last_name.strip(),
+    Email=email.strip().lower(),
+    JoinDate=date.today(),
+    MembershipStatus='Active'
+)
+db.add(new_member)
+db.commit()
+db.refresh(new_member)
+
+# Update Example - Modifying member profile
+member = db.query(Member).filter(Member.MemberID == member_id).first()
+member.FirstName = new_first_name
+member.Phone = new_phone
+db.commit()
+
+# Relationship Navigation - Accessing related data
+member = db.query(Member).filter(Member.MemberID == member_id).first()
+health_records = member.health_metrics  # One-to-many relationship
+latest_goal = member.fitness_goals[-1]  # Accessing related FitnessGoal
+upcoming_sessions = [s for s in member.sessions if s.SessionDate >= date.today()]
+
+# Complex Query - Conflict detection for room booking
+conflicting_booking = db.query(PersonalTrainingSession).filter(
+    PersonalTrainingSession.RoomID == room_id,
+    PersonalTrainingSession.SessionDate == session_date,
+    PersonalTrainingSession.StartTime < session.EndTime,
+    PersonalTrainingSession.EndTime > session.StartTime,
+    PersonalTrainingSession.SessionID != session_id
+).first()
+```
+
+**Mapped Entities:**
+
+1. **Member** - Core entity representing gym members with attributes for personal information, contact details, and membership status
+2. **Trainer** - Entity for personal trainers with specialization and certification information
+3. **AdminStaff** - Administrative staff entity with role and department information
+4. **Room** - Facility room entity with capacity and equipment details
+5. **PersonalTrainingSession** - Session entity connecting members and trainers, supporting both personal training and group classes
+6. **HealthMetric** - Historical health tracking entity with weight, height, body fat, and heart rate measurements
+7. **FitnessGoal** - Goal-setting entity allowing members to track multiple fitness objectives over time
+8. **Invoice** - Billing entity linking members to payment records and sessions
+9. **MaintenanceIssue** - Equipment and facility maintenance tracking entity with status workflow
+
+Each entity includes proper primary keys with autoincrement, foreign key relationships, and bidirectional relationship() mappings that enable seamless navigation between related entities without manual JOIN operations.
+
+

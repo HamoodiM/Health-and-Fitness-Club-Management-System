@@ -1,0 +1,44 @@
+VIDEO DEMONSTRATION SCRIPT !!!
+
+HIGH LEVEL OVERVIEW:
+
+1. ER Model:
+Briefly show your ER diagram and explain the key entities and relationships. Mention any
+assumptions made during design.
+
+2. ER to Relational Mapping:
+Explain how your ER model was translated into relational tables. If using ORM, this means showing
+how entities and relationships are mapped using classes, annotations, or decorators.
+
+3. Database Definition:
+If using ORM:
+You are not required to submit DDL or DML files. Instead, you must:
+- Show the entity class definitions (e.g., Member.java, Session.cs, Class.py)
+- Explain how these classes are used to create and populate tables
+- Demonstrate how table creation, insertion, and queries are done via the ORM (not via raw
+SQL)
+
+4. Functionality Demonstration:
+Walk through all the operations you have implemented (based on your group size). For each:
+- State the user role (Member, Trainer, Admin)
+- Show how the feature works in the application
+- Include both a success case and at least one failure or edge case
+- Show the corresponding backend logic:
+- If using SQL directly: show the SQL statement being executed
+- If using ORM: show the Python/Java/C#/etc. code that performs the database operation
+
+5. Code Structure:
+Give a quick overview of how your code is organized. Highlight key files (e.g., database connection).
+
+6. Interface & User Flow:
+Demonstrate how different users interact with the system (e.g., login flow, navigation across
+member/admin views), even if simple or CLI-based.
+
+LOW LEVEL OVERVIEW:
+
+1. ER Model
+2. Relational Schema
+3. Entities, Relationships, Attributes, Operations 
+4. Code Structure
+5. Interface & User Flow
+6. README

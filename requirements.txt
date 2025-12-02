@@ -1,0 +1,8 @@
+# SQLAlchemy ORM Project Requirements
+# Install with: pip install -r requirements.txt
+
+# Core ORM
+sqlalchemy>=2.0.0
+
+# Database driver
+psycopg2-binary>=2.9.0  # PostgreSQL

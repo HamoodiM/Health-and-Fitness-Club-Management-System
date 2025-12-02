@@ -63,6 +63,7 @@ COMP3005_FinalProject/
 ├── database_advanced.py       # Views, triggers, indexes (core infrastructure)
 ├── cli.py                     # Command-line interface (main entry point)
 ├── requirements.txt          # Python dependencies
+├── REPORT.md                 # ORM Report
 └── README.md                 # This file
 ```
 
